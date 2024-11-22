@@ -1,5 +1,7 @@
 # Dashboards
 ## Synology NAS
+<img src="https://github.com/user-attachments/assets/07d9a74d-c496-483e-83ad-3ef64410ca86" width="200">
+
 Source: [Reddit](https://www.reddit.com/r/synology/comments/1gwpq15/home_assistant_synology_integration_dashboard/) (where else) - [YAML Code on Pastebin](https://pastebin.com/nphtJm3j)
 Code:
 ```
