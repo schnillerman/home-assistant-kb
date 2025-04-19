@@ -1,3 +1,42 @@
+# Matter & Threads
+## Setup Docker-Based Matter Server
+This needs to be on the host network. So you might want to use a RPi or similar, the performance is sufficient.
+### Setup Docker
+#### Linux / Raspberry Pi
+##### Outsource Docker Data
+If you're using an RPi and want to use, e.g., an external drive or another directory for all docker data (images, containers, volumes, etc.), you need to create a file with ```sudo nano /etc/docker/daemon.json``` and insert the following:
+```
+{
+  "data-root": "[directory]"
+}
+```
+##### Install Docker & Docker Compose
+1. https://docs.docker.com/engine/install/debian/
+2. https://docs.docker.com/engine/install/linux-postinstall/
+### Start Matter Server
+Docker-compose:
+Note the _network_mode: host_!
+```
+services:
+  # python-matter-server
+  home-matter-server:
+    image: ghcr.io/home-assistant-libs/python-matter-server:stable
+    container_name: home-matter-server
+    restart: unless-stopped
+    # Required for mDNS to work correctly
+    network_mode: host
+    security_opt:
+      # Needed for Bluetooth via dbus
+      - apparmor:unconfined
+    volumes:
+      # Create an .env file that sets the USERDIR environment variable.
+      - ./data:/data #${USERDIR:-$HOME}/docker/matter-server/data:/data/
+      # Required for Bluetooth via D-Bus
+      - /run/dbus:/run/dbus:ro
+    # If you adjust command line, make sure to pass the default CMD arguments too:
+    #command: --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0
+```
+Add the matter integration in Home Assistant, configure with IP of the RPi (do not change port) then pair first device!
 # Dashboards
 ## Synology NAS
 <img src="https://github.com/user-attachments/assets/07d9a74d-c496-483e-83ad-3ef64410ca86" width="200" align="right">
